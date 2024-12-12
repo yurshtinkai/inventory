@@ -55,7 +55,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.3); 
+            background-color: rgba(0, 0, 0, 0.3);
             justify-content: center;
             align-items: center;
         }
@@ -93,22 +93,7 @@
         .container-fluid a {
             color: white;
         }
-        .login-container .close {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 45px;
-            height: 45px;
-            background: aqua;
-            font-size: 2em;
-            color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom-left-radius: 20px;
-            cursor: pointer;
-            z-index: 1;
-        }
+        
         .login-container h1 {
             font-size: 2.5rem;
             margin-bottom: 20px;
@@ -134,7 +119,7 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
-            background-color: #333;
+            background-color: skyblue;
             color: white;
             margin: 0 10px;
         }
@@ -184,11 +169,10 @@
 
     <div id="loginModal">
         <div class="login-container">
-            <span class="close" id="closeModal">&times;</span>
             <h1>Login</h1>
-            <form id="loginForm" method="POST">
-    @csrf
-    <div class="mb-3">
+        <form action="{{'login'}}" method="POST">
+                @csrf
+            <div class="mb-3">
                 <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
                 <div id="username-error" class="error-message"></div>
             </div>
@@ -199,7 +183,7 @@
             </div>
 
             <button type="submit" class="btn btn-dark btn-login">Login</button>
-</form>
+        </form>
 <div class="social-btns">
             <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
             <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
@@ -214,15 +198,13 @@
      var modal = document.getElementById("loginModal");
         var dashboardBtn = document.getElementById("dashboard-btn");
         var loginBtn = document.getElementById("login-btn");
-        var closeModal = document.getElementById("closeModal");
+
 
         dashboardBtn.onclick = loginBtn.onclick = function() {
             modal.style.display = "flex";
         }
 
-        closeModal.onclick = function() {
-            modal.style.display = "none";
-        }
+
 
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -230,32 +212,34 @@
             }
         }
     $(document).ready(function() {
-        $('#loginForm').on('submit', function(e) {
-            e.preventDefault();
-            $('#username-error').text('');
-            $('#password-error').text('');
+         $('#loginForm').on('submit', function(e) {
+             e.preventDefault();
+                 $('#username-error').text('');
+                 $('#password-error').text('');
 
-            $.ajax({
-                url: "{{ route('login') }}",
-                method: 'POST',
-                data: $(this).serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = "{{ route('dashboard') }}";
-                    }
-                },
-                error: function(response) {
-                    let errors = response.responseJSON.errors;
-                    if (errors.username) {
-                        $('#username-error').text(errors.username[0]);
-                    }
-                    if (errors.password) {
-                        $('#password-error').text(errors.password[0]);
-                    }
-                }
-            });
-        });
-    });
+                 $.ajax({
+                     url: "{{ route('login') }}",   
+                     method: 'POST',
+                     data: $(this).serialize(),
+                     success: function(response) {
+                        
+                     if (response.success) {
+                        
+                     }
+                 },
+                 error: function(response) {
+                    
+                     let errors = response.responseJSON.errors;
+                     if (errors.username) {
+                         $('#username-error').text(errors.username[0]);
+                     }
+                     if (errors.password) {
+                         $('#password-error').text(errors.password[0]);
+                     }
+                 }
+      });
+         });
+     });
 </script>
 </body>
 </html>

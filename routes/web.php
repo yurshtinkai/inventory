@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LostItemController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,8 +22,6 @@ Route::get('/', [AuthController::class, 'index'])->name('index');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
 
 Route::post('/log-out', [AuthController::class, 'logout'])->name('log-out');
 
@@ -29,10 +30,25 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/index', [ContactController::class, 'home'])->name('index');
 
 //Route::get('/add-item', [ItemController::class, 'create'])->name('add-item-form');
-Route::post('/store', [DashboardController::class, 'store'])->name('store');
-Route::delete('/delete/{ItemID}', [DashboardController::class, 'destroy'])->name('destroy');
+Route::delete('/item/{id}/delete', [ItemController::class, 'destroy'])->name('destroy');
+Route::post  ('/storeniga', [LostItemController::class, 'storeLostItem'])->name('storeLostItem');
 
-// Route::get('/item', [ItemController::class, 'index'])->name('item');
-// Route::get('/user', [UserController::class, 'index'])->name('user');
-// Route::get('/lostitem', [LostItemController::class, 'index'])->name('lostitem');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/item/{item}/edit', [ItemController::class, 'edit'])->name('editItem');
+Route::get('/viewdetails', [DashboardController::class, 'details'])->name('details');
+Route::get('/pcparts', [DashboardController::class, 'parts'])->name('pcparts');
+Route::get('/item', [ItemController::class, 'index'])->name('item');
+Route::post('/store', [ItemController::class, 'store'])->name('store');
+Route::put('/item/{item}', [ItemController::class, 'update'])->name('updateItem');
+
+Route::get('/lostitem', [LostItemController::class, 'index'])->name('lostitem');
+Route::get('/lostitem/{lostitem}/edit', [LostItemController::class, 'edit'])->name('editLostItem');
+Route::put('/lostitem/{lostitem}', [LostItemController::class, 'updateLostItem'])->name('updateLostItem');
+Route::delete('/lostitem/{id}/delete', [LostItemController::class, 'destroylostItem'])->name('destroylostItem');
+
+Route::get('/user', [UserController::class, 'index'])->name('user');
+Route::put('/update-user', [UserController::class, 'updateUser'])->name('updateUser');
+Route::post('/users/add', [UserController::class, 'store'])->name('userstore');
+Route::delete('/user/{id}/user', [UserController::class, 'destroy'])->name('destroyuser');
 

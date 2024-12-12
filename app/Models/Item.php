@@ -37,4 +37,5 @@ class Item extends Model
         return $this->belongsTo(Location::class, 'LocationID'); // LocationID is the foreign key in the items table
     }
 
+
 }

@@ -7,7 +7,7 @@ use \App\Models\User;
 class AuthController extends Controller
 {
     private $users = [
-        'admin' => 'adminpass', 
+        'admin' => 'adminpass',
         'user1' => 'user1pass',
         'user2' => 'user2pass',
     ];
@@ -25,7 +25,7 @@ class AuthController extends Controller
     ]);
 
     $this->users = [
-        'admin' => 'adminpass',  
+        'admin' => 'adminpass',
         'user1' => 'user1pass',
         'user2' => 'user2pass',
     ];
@@ -44,12 +44,14 @@ class AuthController extends Controller
         ], 422);
     }
 
+    // Update last_login when user logs in
+    $user = User::where('username', $request->username)->first();
+    $user->last_login = now(); // Set the current time
+    $user->save();
+
     session(['username' => $request->username]);
 
-    return response()->json([
-        'success' => true,
-    ]);
-    
+    return view('content.dashboard');
 }
 
     public function logout()

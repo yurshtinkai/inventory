@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - Inventory System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 
     <style>
         body {
@@ -49,16 +50,50 @@
             align-items: center;
         }
 
-        .modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7);
+        .login-container {
+    background-color: #ffff;
+    color: black;
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            animation: fadeIn 1.1s ease-in-out forwards;
+        }
+        .social-btns {
+            margin-top: 20px;
         }
 
+        .social-btn {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #333;
+            color: white;
+            margin: 0 10px;
+        }
+        .btn-login {
+    border-radius: 12px;
+    padding: 8px 20px;
+    font-size: 1.2rem;
+    background-color: #1877F2;
+    width: 95%;
+    margin-top: 12px;
+}
         
         .container-fluid ul {
             padding: 15px;
@@ -72,7 +107,7 @@
         .container-fluid a {
             color: white;
         }
-        .modal-content .close {
+        .close {
             position: absolute;
             top: 0;
             right: 0;
@@ -162,22 +197,28 @@
 
     <!-- Modal -->
     <div id="loginModal">
-        <div class="modal-content">
+        <div class="login-container">
             <span class="close" id="closeModal">&times;</span>
             <h1>Login</h1>
-            <form method="POST" action="{{ route('login') }}">
+            <form id="loginForm" method="POST">
     @csrf
-    <input type="text" id="username" name="username" class="form-control" placeholder="Username" value="{{ old('username') }}" required>
-    @error('username')
-        <div class="error-message">{{ $message }}</div>
-    @enderror
+    <div class="mb-3">
+                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                <div id="username-error" class="error-message"></div>
+            </div>
 
-    <input type="password" id="password" name="password" class="form-control mt-3" placeholder="Password" required>
-    @error('password')
-        <div class="error-message">{{ $message }}</div>
-    @enderror
-    <button type="submit" class="btn btn-dark mt-3">Login</button>
+            <div class="mb-3">
+                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+                <div id="password-error" class="error-message"></div>
+            </div>
+
+            <button type="submit" class="btn btn-dark btn-login">Login</button>
 </form>
+<div class="social-btns">
+            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+        </div>
         </div>
     </div>
 

@@ -1,49 +1,64 @@
 let btn = document.querySelector('#btn');
 let sidebar = document.querySelector('.sidebar');
-let trapquantity = document.getElementById('quantity');
-let trapEditquantity = document.getElementById('editQuantity');
+const sidebarItems = document.querySelectorAll('.sidebar ul li a');
+const logoutLink = document.querySelector('#logout-link');
 
-btn.onclick = function() {
+// Toggle sidebar state and save to localStorage
+btn.onclick = function () {
     sidebar.classList.toggle('active');
+    localStorage.setItem('sidebarState', sidebar.classList.contains('active') ? 'active' : '');
 };
 
-document.querySelector('a[href="#"]').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('home-container').style.display = 'block';
-    document.getElementById('itemlost-container').style.display = 'none';
-    document.getElementById('inven-contain').style.display = 'none';
-    document.getElementById('user-container').style.display = 'none';
+// Check local storage for sidebar state on page load
+if (localStorage.getItem('sidebarState') === 'active') {
+    sidebar.classList.add('active');
+}
+
+// Add click event to all sidebar links
+sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+        // Save the clicked link to local storage
+        localStorage.setItem('activeLink', item.href);
+
+        // Remove 'active' class from all items
+        sidebarItems.forEach(i => i.classList.remove('active'));
+
+        // Add 'active' class to the clicked item
+        item.classList.add('active');
+    });
 });
 
-document.querySelector('a[href="lostitem"]').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('home-container').style.display = 'none';
-    document.getElementById('itemlost-container').style.display = 'block';
-    document.getElementById('inven-contain').style.display = 'none';
-    document.getElementById('user-container').style.display = 'none';
-});
+// Restore active link from local storage on page load
+const activeLink = localStorage.getItem('activeLink');
+if (activeLink) {
+    sidebarItems.forEach(item => {
+        if (item.href === activeLink) {
+            item.classList.add('active');
+        }
+    });
+}
 
-document.querySelector('a[href="#item"]').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('home-container').style.display = 'none';
-    document.getElementById('itemlost-container').style.display = 'none';
-    document.getElementById('user-container').style.display = 'none';
-    document.getElementById('inven-contain').style.display = 'block';
-});
-document.querySelector('a[href="#user"]').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('home-container').style.display = 'none';
-    document.getElementById('itemlost-container').style.display = 'none';
-    document.getElementById('inven-contain').style.display = 'none';
-    document.getElementById('user-container').style.display = 'block';
-});
+// Clear active link from localStorage when logging out
+if (logoutLink) {
+    logoutLink.addEventListener('click', () => {
+        localStorage.removeItem('activeLink');
+    });
+}
+
+
 document.getElementById('logout-link').addEventListener('click', function(e) {
     e.preventDefault();  // Prevent default anchor behavior
     document.getElementById('logout-form').submit();  // Submit the form
 });
+
+
 function openPopup() {
     document.getElementById('popup').style.display = 'block';
 }
+function openAddLostItemModal() {
+    document.getElementById('add-lost-item-modal').style.display = 'block';
+}
+
 
 function closePopup() {
     document.getElementById('popup').style.display = 'none';
@@ -57,121 +72,6 @@ function clearform(){
     document.getElementById('addForm').reset();
 }
 
-function openEditPopup(index) {
-    const row = document.querySelector(`#inventoryTable tbody tr:nth-child(${index})`);
-    const category = row.children[0].textContent.split(" - ")[0];
-
-    document.getElementById('editCategory').value = category;
-    document.getElementById('editQuantity').value = row.children[1].textContent;
-    document.getElementById('editDate').value = row.children[4].textContent;
-    document.getElementById('editStatus').value = row.children[2].textContent;
-    document.getElementById('editLocation').value = row.children[3].textContent;
-    document.getElementById('editNotes').value = row.children[5].textContent;
-    document.getElementById('editIndex').value = index;
-
-    if (category === 'System Unit') {
-        updateSubCategory(true); 
-        const subCategory = row.children[0].textContent.split(" - ")[1];
-        document.getElementById('editSubCategorySelect').value = subCategory;
-    } else {
-        updateSubCategory(true);
-    }
-
-    document.getElementById('editPopup').style.display = 'block';
-}
-
-function updateSubCategory(isEdit = false) {
-    const category = isEdit ? document.getElementById('editCategory').value : document.getElementById('category').value;
-    const subCategoryDiv = isEdit ? document.getElementById('editSubCategory') : document.getElementById('subCategory');
-    const popup = isEdit ? document.getElementById('editPopup') : document.getElementById('popup');
-
-    if (category === 'System Unit') {
-        subCategoryDiv.style.display = 'block';
-        popup.style.height = '650px';
-    } else {
-        subCategoryDiv.style.display = 'none';
-        popup.style.height = '570px';
-    }
-}
-
-trapquantity.addEventListener('keydown', function(e) {
-    if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
-        e.preventDefault();
-    }
-});
-trapEditquantity.addEventListener('keydown', function(e) {
-    if (e.key === 'e' || e.key === '+' || e.key === '-' || e.key === '.') {
-        e.preventDefault();
-    }
-});
-
-function addItem() {
-    const category = document.getElementById('category').value;
-    const subCategory = document.getElementById('subCategorySelect').value;
-    const quantity = document.getElementById('quantity').value;
-    const date = document.getElementById('date').value;
-    const status = document.getElementById('status').value;
-    const location = document.getElementById('location').value;
-    const notes = document.getElementById('notes').value;
-
-    const displayCategory = category === 'System Unit' ? `${category} - ${subCategory}` : category;
-
-    addItemToTable(displayCategory, quantity, status, location, date, notes);
-    closePopup();
-}
-
-function addItemToTable(category, quantity, status, location, date, notes) {
-    const table = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
-    const row = table.insertRow();
-    
-    // Populate the row with the provided data
-    row.insertCell(0).textContent = category;
-    row.insertCell(1).textContent = quantity;
-    row.insertCell(2).textContent = status;
-    row.insertCell(3).textContent = location;
-    row.insertCell(4).textContent = date;
-    row.insertCell(5).textContent = notes;
-
-    // Create and append buttons in the Action colum    
-    const actionCell = row.insertCell(6);
-    actionCell.innerHTML = `
-        <button class="more-info btn-info btn-sm" onclick="showInfo(this)">More Info</button>
-        <button class="remove-btn" onclick="confirmRemove(this)">Remove</button>
-    `;
-}
-
-function editItem(button) {
-    const row = button.closest('tr');
-    const index = Array.from(row.parentNode.children).indexOf(row) + 1;
-    openEditPopup(index);
-}
-
-function updateItem() {
-    const itemId = document.getElementById('editItemId').value;
-    const formData = new FormData(document.getElementById('editForm'));
-
-    fetch(`/dashboard/${itemId}`, {
-        method: 'POST', // Use PUT or PATCH for updating, but this can be handled by method spoofing in Laravel
-        body: formData,
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'X-Requested-With': 'XMLHttpRequest',
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Item updated successfully!');
-            location.reload(); // Optionally, refresh the page to see the changes
-        } else {
-            alert('Failed to update item.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while updating the item.');
-    });
-}
 
 
 function confirmRemove(button) {
@@ -188,50 +88,11 @@ function confirmRemove(button) {
     };
 }
 
-
 function removeItem(row) {
     row.parentNode.removeChild(row);
 }
 
 
-
-function showInfo(button) {
-    const row = button.closest('tr');
-    const cells = row.cells;
-
-    // Populate the More Info popup with the selected row's data
-    document.getElementById('infoCategory').textContent = cells[0].textContent;
-    document.getElementById('infoQuantity').textContent = cells[1].textContent;
-    document.getElementById('infoStatus').textContent = cells[2].textContent;
-    document.getElementById('infoLocation').textContent = cells[3].textContent;
-    document.getElementById('infoDateAdded').textContent = cells[4].textContent;
-    document.getElementById('infoNotes').textContent = cells[5].textContent;
-
-    // Save row index for editing
-    document.getElementById('editIndex').value = Array.from(row.parentNode.children).indexOf(row) + 1;
-    document.getElementById('infoPopup').style.display = 'block';
-}
-
-function closeInfoPopup() {
-    document.getElementById('infoPopup').style.display = 'none';
-}
-
-
-function editItemFromInfoPopup() {
-    const item = getItemFromInfoPopup(); // Retrieve the item details from the popup
-
-    // Fill the form with the item data
-    document.getElementById('editItemId').value = item.id;
-    document.getElementById('editCategory').value = item.category;
-    document.getElementById('editQuantity').value = item.quantity;
-    document.getElementById('editDate').value = item.date;
-    document.getElementById('editStatus').value = item.status;
-    document.getElementById('editLocation').value = item.location;
-    document.getElementById('editNotes').value = item.notes;
-
-    // Show the edit popup
-    document.getElementById('editPopup').style.display = 'block';
-}
 
 function closeEditPopup() {
     document.getElementById('editPopup').style.display = 'none';
@@ -243,6 +104,135 @@ function closeImagePopup() {
 }
 
 
-window.onload = function () {
-    window.scrollTo(0, 0);
-};
+//edit user
+function openEditUser(userID, name, username, userRole) {
+    document.getElementById('edit-user-id').value = userID;
+    document.getElementById('edit-name').value = name;
+    document.getElementById('edit-username').value = username;
+    document.getElementById('User_Role').value = userRole;
+
+    document.getElementById('edit-user-modal').style.display = 'block';
+}
+
+// Add this new function to handle form submission
+function submitEditUserForm(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('edit-user-form');
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the table row with new data
+            const userRow = document.querySelector(`tr[data-user-id="${data.user.userID}"]`);
+            userRow.querySelector('td:nth-child(2)').textContent = data.user.name;
+            userRow.querySelector('td:nth-child(3)').textContent = data.user.username;
+            userRow.querySelector('td:nth-child(4)').textContent = data.user.user_Role;
+            
+            // Close the modal
+            closeEditUser();
+            
+            // Optional: Show success message
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while updating the user');
+    });
+}
+
+
+function closeEditUser() {
+    // Close the modal and show the user container
+    document.getElementById('edit-user-modal').style.display = 'none';
+    document.getElementById('user-container').style.display = 'block';
+}
+
+function openEditPopup(button) {
+    const row = button.closest('tr');
+    const itemId = row.dataset.itemId;
+    const category = row.dataset.category;
+    const quantity = row.dataset.quantity;
+    const date = row.dataset.date;
+    const status = row.dataset.status;
+    const location = row.dataset.location;
+    const notes = row.dataset.notes;
+
+    document.getElementById('editItemId').value = itemId;
+    document.getElementById('category').value = category;
+    document.getElementById('quantity').value = quantity;
+    document.getElementById('date_added').value = date;
+    document.getElementById('status').value = status;
+    document.getElementById('location').value = location;
+    document.getElementById('notes').value = notes;
+
+    document.getElementById('editPopup').style.display = 'block';
+}
+
+function closeEditPopup() {
+    document.getElementById('editPopup').style.display = 'none';
+}
+
+function toggleSubCategory() {
+    const mainCategory = document.getElementById('item');
+    const subCategoryDiv = document.getElementById('systemUnitSubCategory');
+    const subCategory = document.getElementById('sub_category');
+    
+    if (mainCategory.value === 'System Unit') {
+        subCategoryDiv.style.display = 'block';
+        subCategory.required = true;
+    } else {
+        subCategoryDiv.style.display = 'none';
+        subCategory.required = false;
+    }
+}
+
+function openEditLostPopup(id, itemName, locationId, dateReported, remarks) {
+    document.getElementById('edit-lost-item-modal').style.display = 'block';
+    document.getElementById('edit-id').value = id;
+    document.getElementById('edit-item').value = itemName.split('-')[0]; // Get main category
+    document.getElementById('edit-location').value = locationId;
+    document.getElementById('edit-date-reported').value = dateReported;
+    document.getElementById('edit-remarks').value = remarks;
+
+    // Handle sub-category for System Unit
+    if (itemName.startsWith('System Unit')) {
+        document.getElementById('edit-system-unit-sub').style.display = 'block';
+        document.getElementById('edit-sub-category').value = itemName; // Full item name
+    } else {
+        document.getElementById('edit-system-unit-sub').style.display = 'none';
+    }
+}
+
+
+function closeEditLostItemModal() {
+    document.getElementById('edit-lost-item-modal').style.display = 'none';
+}
+
+function closeAddLostItemModal() {
+    document.getElementById('add-lost-item-modal').style.display = 'none';
+}
+
+function handleItemChange() {
+    const itemDropdown = document.getElementById('item');
+    const subcategoryContainer = document.getElementById('subcategory-container');
+    const subcategoryDropdown = document.getElementById('subcategory');
+
+    if (itemDropdown.value === 'System Unit') {
+        subcategoryContainer.style.display = 'block';
+    } else {
+        subcategoryContainer.style.display = 'none';
+        subcategoryDropdown.value = ''; // Reset subcategory value if not System Unit
+    }
+}
+
+

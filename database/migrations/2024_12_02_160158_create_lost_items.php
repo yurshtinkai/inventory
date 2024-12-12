@@ -14,12 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('lost_items', function (Blueprint $table) {
-            $table->id('lostID');
+            $table->id();
             $table->string('item_name');
-            $table->string('category');
-            $table->date('date_reported');
+            $table->integer('Quantity');
             $table->unsignedBigInteger('LocationID');
-            $table->string('reported_by');
+            $table->unsignedBigInteger('userID');
+            $table->date('date_reported');
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();

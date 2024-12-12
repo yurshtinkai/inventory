@@ -9,19 +9,18 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LostItem extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $primaryKey = 'lostID'; // Only needed if your table name is not 'items'
-
+ 
+    protected $primaryKey = 'id';
+ 
     protected $fillable = [
         'item_name',
+        'Quantity',
         'LocationID',
         'userID',
-        'Quantity',
-        'Status',
-        'DateAdded',
-        'Notes',
+        'date_reported',
+        'remarks',
     ];
-
+ 
     public function location()
     {
         return $this->belongsTo(Location::class, 'LocationID'); // LocationID is the foreign key in the items table
