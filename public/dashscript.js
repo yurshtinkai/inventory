@@ -3,13 +3,12 @@ let sidebar = document.querySelector('.sidebar');
 const sidebarItems = document.querySelectorAll('.sidebar ul li a');
 const logoutLink = document.querySelector('#logout-link');
 
-// Toggle sidebar state and save to localStorage
 btn.onclick = function () {
     sidebar.classList.toggle('active');
     localStorage.setItem('sidebarState', sidebar.classList.contains('active') ? 'active' : '');
 };
 
-// Check local storage for sidebar state on page load
+
 if (localStorage.getItem('sidebarState') === 'active') {
     sidebar.classList.add('active');
 }
@@ -47,8 +46,8 @@ if (logoutLink) {
 
 
 document.getElementById('logout-link').addEventListener('click', function(e) {
-    e.preventDefault();  // Prevent default anchor behavior
-    document.getElementById('logout-form').submit();  // Submit the form
+    e.preventDefault(); 
+    document.getElementById('logout-form').submit();  
 });
 
 
@@ -74,8 +73,8 @@ function clearform(){
 
 
 
-function confirmRemove(button) {
-    const row = button.closest('tr');
+function confirmRemove() {
+
     
     document.getElementById('removeConfirmationPopup').style.display = 'flex';
 
@@ -106,6 +105,8 @@ function closeImagePopup() {
 
 //edit user
 function openEditUser(userID, name, username, userRole) {
+    console.log(user);
+    
     document.getElementById('edit-user-id').value = userID;
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-username').value = username;
@@ -222,17 +223,12 @@ function closeAddLostItemModal() {
     document.getElementById('add-lost-item-modal').style.display = 'none';
 }
 
-function handleItemChange() {
-    const itemDropdown = document.getElementById('item');
-    const subcategoryContainer = document.getElementById('subcategory-container');
-    const subcategoryDropdown = document.getElementById('subcategory');
 
-    if (itemDropdown.value === 'System Unit') {
-        subcategoryContainer.style.display = 'block';
-    } else {
-        subcategoryContainer.style.display = 'none';
-        subcategoryDropdown.value = ''; // Reset subcategory value if not System Unit
-    }
+function openAddUser() {
+    closeEditUser(); // Ensure Edit modal is closed
+    document.getElementById('add-user-modal').style.display = 'block';
 }
-
-
+function closeAddUser() {
+    closeEditUser(); // Ensure Edit modal is closed
+    document.getElementById('add-user-modal').style.display = 'none';
+}

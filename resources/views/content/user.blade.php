@@ -44,7 +44,11 @@
                 <button class="remove-btn"  onclick="confirmRemove(this)">❌</button>
             </td>
                     
-                        <div id="removeConfirmationPopup" class="confirm-popup" style="display: none;">
+                    @endforeach
+                </tbody>
+            </table>
+
+            <div id="removeConfirmationPopup" class="confirm-popup" style="display: none;">
                     <div class="confirmpopup-content">
                         <h2>Remove Item</h2>
                         <p>Are you sure you want to remove this data?</p>
@@ -58,10 +62,7 @@
                         </div>
                     </div>
                 </div>
-                    @endforeach
-                </tbody>
-            </table>
-
+                
             <div id="add-user-modal" class="popupmodal" style="display: none;">
     <div class="popup-content">
         <h3>Add User</h3>

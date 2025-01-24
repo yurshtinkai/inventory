@@ -60,14 +60,14 @@
                 <span class="tooltip">LostItem</span>
             </li>
             <li>
-                <a href="report">
+                <a>
                     <i class="fas fa-clipboard-list report-icon"></i>
                     <span class="nav-item">Reports</span>
                 </a>
                 <span class="tooltip">LostItem</span>
             </li> 
             <li>
-                <a href="settings">
+                <a>
                     <i class="bx bxs-cog"></i>
                     <span class="nav-item">Settings</span>
                 </a>

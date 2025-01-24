@@ -6,12 +6,7 @@ use Illuminate\Http\Request;
 use \App\Models\User;
 class AuthController extends Controller
 {
-    private $users = [
-        'admin' => 'adminpass',
-        'user1' => 'user1pass',
-        'user2' => 'user2pass',
-    ];
-
+    
     public function index()
     {
         return view('index');
@@ -24,35 +19,36 @@ class AuthController extends Controller
         'password' => 'required|min:6',
     ]);
 
-    $this->users = [
-        'admin' => 'adminpass',
-        'user1' => 'user1pass',
-        'user2' => 'user2pass',
-    ];
-
-    if (!array_key_exists($request->username, $this->users)) {
-        return response()->json([
-            'success' => false,
-            'errors' => ['username' => ['Incorrect username.']]
-        ], 422);
-    }
-
-    if ($this->users[$request->username] !== $request->password) {
-        return response()->json([
-            'success' => false,
-            'errors' => ['password' => ['Incorrect password.']]
-        ], 422);
-    }
-
-    // Update last_login when user logs in
     $user = User::where('username', $request->username)->first();
-    $user->last_login = now(); // Set the current time
+    $user->last_login = now();
     $user->save();
+    if (!$user) {
+        return response()->json([
+            'success' => false,
+            'errors' => [
+                'username' => ['Username does not exist.'],
+            ],
+        ], 422);
+    }
 
-    session(['username' => $request->username]);
+    if ($request->password !== $user->password) {
+        return response()->json([
+            'success' => false,
+            'errors' => [
+                'password' => ['Incorrect password.'],
+            ],
+        ], 422);
+    }
+	
 
-    return view('content.dashboard');
+    session(['username' => $user->username]);
+
+    return response()->json([
+        'success' => true,
+        'redirect' => route('dashboard'),
+    ]);
 }
+
 
     public function logout()
     {

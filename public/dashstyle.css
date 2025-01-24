@@ -682,6 +682,7 @@ body{
 .card.green .header i { color: #fff; }
 .card.red .header i { color: #fff; }
 .card.orange .header i { color: #fff; }
+  
 
 .header {
     font-size: 14px;
@@ -756,4 +757,8 @@ body{
     height: 50px;
     object-fit: cover;
     border-radius: 4px;
+}
+
+.status{
+    gap: 5px;
 }

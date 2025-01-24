@@ -14,9 +14,21 @@ class DashboardController extends Controller
     {
         return view('content.viewdetails');
     }
-    public function parts()
+    public function laboneF()
     {
-        return view('content.pcparts');
+        return view('content.comOneF');
+    }
+    public function laboneNF()
+    {
+        return view('content.comOneNF');
+    }
+    public function labtwoF()
+    {
+        return view('content.comlabtwoF');
+    }
+    public function labtwoNF()
+    {
+        return view('content.comlabtwoNF');
     }
 
     

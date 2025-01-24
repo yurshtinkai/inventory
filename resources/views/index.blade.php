@@ -170,24 +170,23 @@
     <div id="loginModal">
         <div class="login-container">
             <h1>Login</h1>
-        <form action="{{'login'}}" method="POST">
-                @csrf
-            <div class="mb-3">
-                <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
-                <div id="username-error" class="error-message"></div>
-            </div>
+            <form id="loginForm" action="{{ route('login') }}" method="POST">
+    @csrf
+    <div class="mb-3">
+        <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+        <div id="username-error" class="error-message"></div>
+    </div>
 
-            <div class="mb-3">
-                <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                <div id="password-error" class="error-message"></div>
-            </div>
+    <div class="mb-3">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+        <div id="password-error" class="error-message"></div>
+    </div>
 
-            <button type="submit" class="btn btn-dark btn-login">Login</button>
-        </form>
-<div class="social-btns">
-            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
-            <a href="#" class="social-btn"><i class="fab fa-twitter"></i></a>
+    <button type="submit" class="btn btn-dark btn-login">Login</button>
+</form>
+
+<div class="mt-3">
+            <a class="text-decoration-none" style="color: #1877F2;">Forgot Password?</a>
         </div>
         </div>
     </div>
@@ -211,35 +210,35 @@
                 modal.style.display = "none";
             }
         }
-    $(document).ready(function() {
-         $('#loginForm').on('submit', function(e) {
-             e.preventDefault();
-                 $('#username-error').text('');
-                 $('#password-error').text('');
+        $(document).ready(function() {
+    $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
 
-                 $.ajax({
-                     url: "{{ route('login') }}",   
-                     method: 'POST',
-                     data: $(this).serialize(),
-                     success: function(response) {
-                        
-                     if (response.success) {
-                        
-                     }
-                 },
-                 error: function(response) {
-                    
-                     let errors = response.responseJSON.errors;
-                     if (errors.username) {
-                         $('#username-error').text(errors.username[0]);
-                     }
-                     if (errors.password) {
-                         $('#password-error').text(errors.password[0]);
-                     }
-                 }
-      });
-         });
-     });
+        $('#username-error').text('');
+        $('#password-error').text('');
+
+        $.ajax({
+            url: "{{ route('login') }}",
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    window.location.href = response.redirect;
+                }
+            },
+            error: function(response) {
+                let errors = response.responseJSON.errors;
+
+                if (errors.username) {
+                    $('#username-error').text(errors.username[0]);
+                }
+                if (errors.password) {
+                    $('#password-error').text(errors.password[0]);
+                }
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>

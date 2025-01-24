@@ -36,7 +36,6 @@ Route::post  ('/storeniga', [LostItemController::class, 'storeLostItem'])->name(
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/item/{item}/edit', [ItemController::class, 'edit'])->name('editItem');
-Route::get('/viewdetails', [DashboardController::class, 'details'])->name('details');
 Route::get('/pcparts', [DashboardController::class, 'parts'])->name('pcparts');
 Route::get('/item', [ItemController::class, 'index'])->name('item');
 Route::post('/store', [ItemController::class, 'store'])->name('store');
@@ -51,4 +50,14 @@ Route::get('/user', [UserController::class, 'index'])->name('user');
 Route::put('/update-user', [UserController::class, 'updateUser'])->name('updateUser');
 Route::post('/users/add', [UserController::class, 'store'])->name('userstore');
 Route::delete('/user/{id}/user', [UserController::class, 'destroy'])->name('destroyuser');
+
+
+Route::get('/viewdetails', [DashboardController::class, 'details'])->name('details');
+Route::get('/laboneF', [DashboardController::class, 'laboneF'])->name('laboneF');
+Route::get('/laboneNF', [DashboardController::class, 'laboneNF'])->name('laboneNF');
+
+Route::get('/labtwoF', [DashboardController::class, 'labtwoF'])->name('labtwoF');
+Route::get('/labtwoNF', [DashboardController::class, 'labtwoNF'])->name('labtwoNF');
+
+Route::get('/getComlab1Quantity', [LostItemController::class, 'getComlab1Quantity']);
 

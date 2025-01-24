@@ -75,8 +75,8 @@ public function updateLostItem(Request $request, LostItem $lostitem)
 }
 public function destroylostItem($id)
 {
-    $item = LostItem::find($id);
-    $item->delete();
+    $lost = LostItem::find($id);
+    $lost->delete();
     return redirect()->route('lostitem');
 }
 

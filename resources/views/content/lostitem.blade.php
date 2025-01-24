@@ -41,22 +41,12 @@
     '{{ $lost->date_reported }}',
     '{{ $lost->remarks }}'
 )">✏️Edit</button>
-                        <button class="delete-btn" onclick="confirmRemove(this)">❌Delete</button>
-                    </td>
-                    <div id="removeConfirmationPopup" class="confirm-popup" style="display: none;">
-    <div class="confirmpopup-content">
-        <h2>Remove Item</h2>
-        <p>Are you sure you want to Delete this data?</p>
-        <div class="confirm-buttons">
-            <form action="{{ route('destroylostItem',  $lost->id) }}" method="POST">
+                        <form action="{{ route('destroylostItem',  $lost->id) }}" method="POST">
             @csrf
             @method('DELETE')
-            <button type="submit" id="confirmRemove" class="btn-confirm">Yes</button>
-            </form>
-            <button id="cancelRemove" class="btn-cancel">No</button>
-        </div>
-    </div>
-</div>
+                        <button class="delete-btn" onclick="confirmRemove(this)">❌Delete</button>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
@@ -70,7 +60,7 @@
         <form id="add-lost-item-form" action="{{ route('storeLostItem') }}" method="POST">
     @csrf
     <label for="item">Item Category</label>
-    <select id="item" name="item" onchange="handleItemChange()" required>
+    <select id="item" name="item" required>
         <option value="" disabled selected>Select an item</option>
         <option value="Monitor">Monitor</option>
         <option value="Keyboard">Keyboard</option>
@@ -79,27 +69,15 @@
         <option value="System Unit">System Unit</option>
     </select>
 
-    <div id="subcategory-container" style="display: none;">
-    <label for="subcategory">Subcategory</label>
-    <select id="subcategory">
-        <option value="" disabled selected>Select a subcategory</option>
-        <option value="CPU">CPU</option>
-        <option value="Motherboard">Motherboard</option>
-        <option value="RAM">RAM</option>
-        <option value="SSD">SSD</option>
-        <option value="Cooling Fan">Cooling Fan</option>
-    </select>
-</div>
-
-<label for="quantity">Quantity:</labe>
-<input type="number" name="quantity" id="quantity" required>
-
     <label for="location">Location</label>
     <select id="location" name="LocationID" required>
         @foreach($locations as $location)
             <option value="{{ $location->LocationID }}">{{ $location->LocationName }}</option>
         @endforeach
     </select>
+
+<label for="quantity">Quantity:</labe>
+<input type="number" name="quantity" id="quantity" required>
 
     <label for="date_reported">Date Reported</label>
     <input type="date" id="date_reported" name="date_reported" required>
@@ -132,19 +110,7 @@
             <option value="System Unit">System Unit</option>
         </select>
 
-        <div id="subcategory-container" style="display: none;">
-    <label for="subcategory">Subcategory</label>
-    <select id="subcategory">
-        <option value="" disabled selected>Select a subcategory</option>
-        <option value="CPU">CPU</option>
-        <option value="Motherboard">Motherboard</option>
-        <option value="RAM">RAM</option>
-        <option value="SSD">SSD</option>
-        <option value="Cooling Fan">Cooling Fan</option>
-    </select>
-</div>
-
-
+        
         <label for="edit-quantity">Quantity:</labe>
         <input type="number" name="quantity" id="edit-quantity" required>
 
